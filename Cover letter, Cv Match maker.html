@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Smart Cover Letter Generator</title>
+  <style>
+    :root {
+      --bg: #0f1724;
+      --card: #0b1220;
+      --muted: #9aa4b2;
+      --accent: #5eead4;
+      --glass: rgba(255,255,255,0.03);
+      --hover-glow: rgba(94,234,212,0.3);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', ui-sans-serif, system-ui, 'Segoe UI', Roboto, Helvetica, Arial;
+      margin: 0;
+      background: linear-gradient(180deg,#071023 0%, #071930 100%);
+      color: #e6eef6;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+    }
+
+    .container { width: 100%; max-width: 980px; }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #0ea5a4, #7c3aed);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 22px;
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .logo:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 28px rgba(0,0,0,0.5);
+    }
+
+    .header-text h1 {
+      font-size: 28px;
+      font-weight: 900;
+      margin: 0;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .header-text h2 {
+      font-size: 22px;
+      font-weight: 500;
+      margin: 0;
+      text-align: center;
+    }
+
+    .header-text p.lead {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--muted);
+      text-align: justify;
+      max-width: 680px;
+      margin: 8px auto 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card);
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 8px 40px rgba(2,6,23,0.6);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 50px rgba(2,6,23,0.7);
+      background: linear-gradient(145deg, #0b1220 0%, #0c1630 100%);
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    input[type=text], textarea, select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.05);
+      background: var(--glass);
+      color: inherit;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+
+    input[type=text]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 8px var(--hover-glow);
+      background: rgba(255,255,255,0.05);
+    }
+
+    textarea { min-height: 120px; resize: vertical; }
+
+    .small { font-size: 12px; color: var(--muted); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 14px;
+      border: 0;
+      background: linear-gradient(90deg,#06b6d4,#7c3aed);
+      color: #042027;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+
+    .btn:hover {
+      opacity: 0.95;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px rgba(0,0,0,0.4);
+    }
+
+    .muted-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.06);
+      color: var(--muted);
+      transition: all 0.2s ease;
+    }
+
+    .muted-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .output {
+      white-space: pre-wrap;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      padding: 16px;
+      border-radius: 12px;
+      min-height: 160px;
+      overflow: auto;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .output:hover { box-shadow: 0 4px 20px rgba(94,234,212,0.2); }
+
+    .controls { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+
+    footer {
+      margin-top: 32px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .chip {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.03);
+      font-size: 12px;
+      transition: all 0.2s ease;
+    }
+
+    .chip:hover { background: rgba(94,234,212,0.1); }
+
+    @media(max-width:900px){
+      .grid { grid-template-columns: 1fr; }
+      .logo { width: 50px; height: 50px; font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">EM</div>
+      <div class="header-text">
+        <h1>Eminent Media</h1>
+        <h2>Smart Cover Letter Generator</h2>
+        <p class="lead">
+          Create a concise and professional cover letter or email tailored to the position you are applying for.  
+          Simply paste the job description, and the tool will automatically extract key skills and responsibilities.  
+          You will receive a polished letter ready to copy and personalize for your application.
+        </p>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <form id="form">
+          <label for="fullname">Your full name</label>
+          <input id="fullname" name="fullname" type="text" placeholder="e.g. Surname and first name" required />
+
+          <div style="display:flex;gap:10px;margin-top:10px">
+            <div style="flex:1">
+              <label for="app-title">Job title you're applying for</label>
+              <input id="app-title" name="app-title" type="text" placeholder="e.g. Frontend Developer" required />
+            </div>
+            <div style="width:140px">
+              <label for="location">Location (optional)</label>
+              <input id="location" name="location" type="text" placeholder="e.g. Remote" />
+            </div>
+          </div>
+
+          <label for="company" style="margin-top:10px">Company name (optional)</label>
+          <input id="company" name="company" type="text" placeholder="e.g. Acme Corp" />
+
+          <label for="cvfile" style="margin-top:10px">Upload your CV (PDF)</label>
+          <input id="cvfile" name="cvfile" type="file" accept="application/pdf" />
+
+          <label for="cvtext" style="margin-top:10px">Paste your CV / key achievements (short bullets recommended)</label>
+          <textarea id="cvtext" placeholder="Short bullets or summary of skills, e.g. 5+ years React, built X product..."></textarea>
+
+          <label for="jd" style="margin-top:10px">Paste the job description here (important)</label>
+          <textarea id="jd" placeholder="Paste the full job posting or a few paragraphs describing the role — this helps tailor the letter." required></textarea>
+
+          <div class="small" style="margin-top:6px">Tip: paste the exact job description to improve keyword matching. The generator will extract top skills and responsibilities to reference in your letter.</div>
+
+          <div style="display:flex;gap:10px;margin-top:12px;align-items:center">
+            <button type="button" id="generate" class="btn">Generate cover letter</button>
+            <button type="button" id="clear" class="muted-btn">Clear</button>
+            <div style="margin-left:auto" class="chip" id="keywords">Top keywords: —</div>
+          </div>
+        </form>
+
+        <div style="margin-top:12px">
+          <label class="small">Generated cover letter / email body</label>
+          <div id="output" class="output">Your generated letter will appear here after you click "Generate cover letter".</div>
+
+          <div class="controls">
+            <button id="copy" class="btn">Copy to clipboard</button>
+            <button id="edit-manually" class="muted-btn">Edit manually</button>
+          </div>
+
+          <div style="margin-top:12px;background:rgba(255,255,255,0.01);padding:10px;border-radius:8px">
+            <strong>Important:</strong> Before sending, make sure you <em>input and confirm</em> your personal details, dates and achievements — tailor the generated text to you and the specific job. Do not send without reviewing.
+          </div>
+        </div>
+      </section>
+
+      <aside class="card">
+        <h3 style="margin-top:0">How the generator works</h3>
+        <p class="small">Eminent Media’s script tokenizes the job description, removes common stopwords, counts frequency of remaining words and selects the top phrases to reference in the cover letter. It blends your CV bullets and the role's key responsibilities into a concise 3-paragraph letter suitable for pasting as an email body or as an attached cover letter.</p>
+
+        <h4 style="margin-bottom:6px">Suggested method of application (simple & effective)</h4>
+        <ol class="small">
+          <li><strong>Customize:</strong> Tailor the generated letter with at least one specific achievement that matches a job requirement.</li>
+          <li><strong>Subject line:</strong> Use a clear subject like "Application: [Job Title] — [Your Name]".</li>
+          <li><strong>Attachment naming:</strong> Save your CV as "Firstname-Lastname-CV.pdf" and cover letter as "Firstname-Lastname-CoverLetter.pdf".</li>
+          <li><strong>Email body:</strong> Paste the tailored letter as the email body. Keep attachments minimal — PDF CV, optionally a one-page cover letter.</li>
+          <li><strong>Follow-up:</strong> If no reply after 7–10 days, send a polite follow-up referencing the role and date you applied.</li>
+          <li><strong>Apply widely but smartly:</strong> Prioritize roles where your top skills match the JD keywords.</li>
+        </ol>
+
+        <h4 style="margin-top:12px">Quick checklist before sending</h4>
+        <ul class="small">
+          <li>Spelling & grammar checked</li>
+          <li>Contact details correct</li>
+          <li>CV highlights aligned with the job</li>
+          <li>Files named professionally</li>
+        </ul>
+
+        <div style="margin-top:12px">
+          <button id="stay" class="btn">Click here to stay connected with Eminent Media</button>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <div>© <strong>Eminent Media</strong> <span id="year"></span> — All Rights Reserved.</div>
+      <div style="margin-top:4px;">Eminent Media | Smart Cover Letter Generator — Crafted for job seekers to create concise, tailored, and professional cover letters with ease.</div>
+    </footer>
+  </div>
+
+  <script>
+    const stopwords = new Set(["the","and","to","of","a","in","for","with","on","that","is","as","are","be","or","by","an","this","you","your","will","we","our","at","from","which","use","using","have","has","have","will","able"]);
+
+    function extractKeywords(text, max=6){
+      if(!text) return [];
+      const words = text.toLowerCase().replace(/["'.,()/:;+-]/g,' ').split(/\s+/).filter(Boolean);
+      const freqs = {};
+      for(const w of words){
+        if(w.length<3) continue;
+        if(stopwords.has(w)) continue;
+        freqs[w] = (freqs[w]||0) + 1;
+      }
+      return Object.entries(freqs).sort((a,b)=>b[1]-a[1]).slice(0,max).map(x=>x[0]);
+    }
+
+    function buildLetter(data){
+      const {fullname,jobtitle,company,location,cvtext,jd,keywords} = data;
+      const compPart = company ? ` at ${company}` : '';
+      const locationPart = location ? ` (${location})` : '';
+
+      const opening = `Dear Hiring Manager,\n\nMy name is ${fullname} and I am writing to apply for the ${jobtitle}${compPart}${locationPart}. I was excited to see this opportunity and believe my background makes me a strong fit.`;
+
+      const top = keywords.length ? keywords.join(', ') : 'the key requirements listed in the posting';
+      let bullets = '';
+
+      if(cvtext && cvtext.trim()){
+        const lines = cvtext.split(/\n|;|\. |\u2022/).map(s=>s.trim()).filter(Boolean).slice(0,4);
+        if(lines.length){
+          bullets = '\n\nRelevant highlights:\n' + lines.map(l=>`• ${l}`).join('\n');
+        }
+      }
+
+      const middle = `\n\nIn my previous roles I have worked on ${top} and delivered tangible results that match what you're seeking. I bring a proven ability to quickly learn and adapt, and a track record of delivering high-quality work.${bullets}`;
+
+      const closing = `\n\nI would welcome the opportunity to discuss how I can contribute to your team. Thank you for considering my application.\n\nSincerely,\n${fullname}`;
+
+      return opening + middle + closing;
+    }
+
+    const jdEl = document.getElementById('jd');
+    const kwChip = document.getElementById('keywords');
+    const outputEl = document.getElementById('output');
+    const yearEl = document.getElementById('year');
+    yearEl.textContent = new Date().getFullYear();
+
+    document.getElementById('generate').addEventListener('click', ()=>{
+      const fullname = document.getElementById('fullname').value.trim();
+      const jobtitle = document.getElementById('app-title').value.trim();
+      const company = document.getElementById('company').value.trim();
+      const location = document.getElementById('location').value.trim();
+      const cvtext = document.getElementById('cvtext').value.trim();
+      const jd = jdEl.value.trim();
+
+      if(!fullname || !jobtitle || !jd){
+        alert('Please enter your full name, the job title and paste the job description — these are required to generate a tailored letter.');
+        return;
+      }
+
+      const kws = extractKeywords(jd,6);
+      kwChip.textContent = kws.length ? 'Top keywords: ' + kws.join(', ') : 'Top keywords: —';
+
+      const letter = buildLetter({fullname,jobtitle,company,location,cvtext,jd,keywords:kws});
+      outputEl.textContent = letter;
+
+      outputEl.textContent += '\n\n[IMPORTANT] Before sending: make sure names, dates and achievements are correct. Personalize at least one sentence with a specific measurable achievement.';
+    });
+
+    document.getElementById('clear').addEventListener('click', ()=>{
+      document.getElementById('form').reset();
+      outputEl.textContent = 'Your generated letter will appear here after you click "Generate cover letter".';
+      kwChip.textContent = 'Top keywords: —';
+    });
+
+    document.getElementById('copy').addEventListener('click', async ()=>{
+      try{
+        await navigator.clipboard.writeText(outputEl.textContent);
+        alert('Copied to clipboard — paste into your email client or editor and personalize.');
+      }catch(err){
+        alert('Copy failed. You can select the text and copy manually.');
+      }
+    });
+
+    document.getElementById('edit-manually').addEventListener('click', ()=>{
+      const txt = outputEl.textContent;
+      const ta = document.createElement('textarea');
+      ta.style.width = '100%'; 
+      ta.style.minHeight = '240px'; 
+      ta.value = txt;
+      outputEl.replaceWith(ta);
+      ta.id = 'output';
+    });
+
+    document.getElementById('stay').addEventListener('click', ()=>{
+      const url = 'https://mtechconsult.github.io/EMINENT-MEDIA.-';
+      if(url) window.open(url,'_blank');
+    });
+  </script>
+</body>
+</html>
